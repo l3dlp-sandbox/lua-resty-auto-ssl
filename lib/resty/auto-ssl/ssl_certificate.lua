@@ -159,7 +159,10 @@ end
 local function get_ocsp_response(fullchain_der, auto_ssl_instance)
   -- Pull the OCSP URL to hit out of the certificate chain.
   local ocsp_url, ocsp_responder_err = ocsp.get_ocsp_responder_from_der_chain(fullchain_der)
-  if not ocsp_url then
+  if not ocsp_url and not ocsp_responder_err then
+	-- There is no OCSP responder, stop silently
+	return "", nil
+  elseif not ocsp_url then
     return nil, "failed to get OCSP responder: " .. (ocsp_responder_err or "")
   end
 
@@ -236,9 +239,11 @@ local function set_ocsp_stapling(domain, cert_der, auto_ssl_instance)
   end
 
   -- Set the OCSP stapling response.
-  local ok, ocsp_status_err = ocsp.set_ocsp_status_resp(ocsp_resp)
-  if not ok then
-    return false, "failed to set ocsp status resp: " .. (ocsp_status_err or "")
+  if ocsp_resp ~= "" then
+    local ok, ocsp_status_err = ocsp.set_ocsp_status_resp(ocsp_resp)
+    if not ok then
+      return false, "failed to set ocsp status resp: " .. (ocsp_status_err or "")
+    end
   end
 
   return true
