@@ -1,3 +1,18 @@
+> [!WARNING] 
+> ![](https://img.shields.io/badge/Project%20Status-Abandoned-orange)  
+> This project is currently abandoned, if you're looking for an open source ACME client with built in SSL/TLS support, feel free to try out other related projects.
+>
+> * [acme.sh](https://github.com/acmesh-official/acme.sh)
+> * [acme-companion](https://github.com/nginx-proxy/acme-companion)
+> * [dehydrated-io](https://github.com/dehydrated-io/dehydrated)
+> * [win-acme](https://github.com/win-acme)
+
+> [!NOTE] 
+> ![](https://img.shields.io/badge/Maintainers-Wanted-blue)  
+> If you're interested in regularly contributing to **lua-resty-auto-ssl** (with monetary compensation included) - feel free to reach out to us at support@zerossl.com  
+  
+----
+
 # lua-resty-auto-ssl
 
 [![CI](https://github.com/GUI/lua-resty-auto-ssl/workflows/CI/badge.svg)](https://github.com/GUI/lua-resty-auto-ssl/actions?workflow=CI)
