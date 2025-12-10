@@ -135,7 +135,16 @@ local function get_cert_der(auto_ssl_instance, domain, ssl_options)
   end
 
   if cert and cert["fullchain_pem"] and cert["privkey_pem"] then
-    local cert_der = convert_to_der_and_cache(domain, cert)
+    local cert_der, cert_der_err = convert_to_der_and_cache(domain, cert)
+
+    if cert_der_err then
+      ngx.log(ngx.ERR, "auto-ssl: error converting certificate for ", domain, ": ", cert_der_err)
+    end
+    
+    if not cert_der then
+      return nil, "empty cert_der received"
+    end
+
     cert_der["newly_issued"] = false
     return cert_der
   end
@@ -144,7 +153,15 @@ local function get_cert_der(auto_ssl_instance, domain, ssl_options)
   if not ssl_options or ssl_options["generate_certs"] ~= false then
     cert = issue_cert(auto_ssl_instance, storage, domain)
     if cert and cert["fullchain_pem"] and cert["privkey_pem"] then
-      local cert_der = convert_to_der_and_cache(domain, cert)
+      local cert_der, cert_der_err = convert_to_der_and_cache(domain, cert)
+      if cert_der_err then
+        ngx.log(ngx.ERR, "auto-ssl: error converting certificate for ", domain, ": ", cert_der_err)
+      end
+      
+      if not cert_der then
+        return nil, "empty cert_der received"
+      end
+
       cert_der["newly_issued"] = true
       return cert_der
     end
